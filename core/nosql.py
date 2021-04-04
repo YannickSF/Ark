@@ -4,7 +4,7 @@ import os
 from tinydb import TinyDB, Query
 
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-DATABASE_PATH = 'datas'
+DATABASE_PATH = '../datas'
 
 
 class Table(TinyDB):
@@ -36,19 +36,6 @@ class Table(TinyDB):
         """Return the database filename"""
 
         return self._name
-
-    def insert_obj(self, obj):
-        """Add an object to table"""
-
-        self.insert(obj.__repr__())
-
-    def update_obj(self, obj, expression):
-        """update an object to table"""
-        self.update(obj.__repr__(), expression)
-
-    def upsert_obj(self, obj, expression):
-        """Update or Add if not exist an object to table"""
-        self.upsert(obj.__repr__(), expression)
 
     @staticmethod
     def get_fields(datas, fields_name: list):
