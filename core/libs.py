@@ -1,4 +1,7 @@
+
+import os
 from threading import Lock
+from settings import SETTINGS
 
 
 class SingletonMeta(type):
@@ -34,3 +37,11 @@ class SingletonMeta(type):
                 instance = super().__call__(*args, **kwargs)
                 cls._instances[cls] = instance
         return cls._instances[cls]
+
+
+def delete_file(name):
+    os.remove(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH, '{0}.json'.format(name)))
+
+
+def datas_files():
+    return os.listdir(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH))

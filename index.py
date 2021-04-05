@@ -1,39 +1,24 @@
 
-from core.libs import SingletonMeta
+from core.libs import SingletonMeta, delete_file, datas_files
 from core.objects import Column
 
 
 class Ark(metaclass=SingletonMeta):
     def __init__(self):
         self._attributes = []
+        self._upload()
 
     def _upload(self):
         # looking for columns's file and create attribute for each one.
-        pass
+        files = datas_files()
+        for i in files:
+            self.add(i.split('.')[0])
 
     def add(self, name):
-        nct = Column(name)
-        setattr(self, name, nct)
+        setattr(self, name, Column(name))
         self._attributes.append(name)
 
-    def put(self, name, other):
-        # alter column name.
-        pass
-
     def remove(self, name):
-        # drop column.
         delattr(self, name)
-        # remove file after removing attributes.
+        delete_file(name)
         self._attributes.remove(name)
-
-    def commit(self):
-        # save cache columns.
-        for a in self._attributes:
-            self[a].commit()
-        return True
-
-    def refresh(self):
-        # restore cache from columns.
-        for a in self._attributes:
-            self[a].refresh()
-        return True

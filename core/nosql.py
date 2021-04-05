@@ -2,9 +2,7 @@
 
 import os
 from tinydb import TinyDB, Query
-
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-DATABASE_PATH = '../datas'
+from settings import SETTINGS
 
 
 class Table(TinyDB):
@@ -21,7 +19,7 @@ class Table(TinyDB):
             table_name = '{0}.json'.format(table_name)
 
         self._name = table_name
-        table_path = os.path.join(PROJECT_PATH, DATABASE_PATH, self._name)
+        table_path = os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH, self._name)
         # Setting not configured arguments
         kwargs['path'] = table_path
         kwargs['sort_keys'] = kwargs['sort_keys'] if 'sort_keys' in kwargs else True

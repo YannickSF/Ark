@@ -1,6 +1,7 @@
 
 import unittest
 from core.objects import Column
+from core.libs import delete_file
 
 c = Column('test')
 
@@ -26,7 +27,7 @@ class TestColumn(unittest.TestCase):
         c.insert(object={'id': 'id2', 'key2': 'value2'})
 
         values = c.get()
-        obj1 = c.get('id1')
+        obj1 = c.get('id1', property='id')
 
         self.assertTrue(len(values) == 2)
         self.assertEqual({'id': 'id1', 'key1': 'value1'}, obj1[0])

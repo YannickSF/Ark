@@ -16,14 +16,16 @@ class Column:
             self.refresh()
 
     def _find(self, *args, **kwargs):
+        # todo : EVOLUTION -> prendre plusieurs propriétées en charge pour la recherche.
         return list(filter(lambda x: x[kwargs['property']] == args[0], [self.cache[k] for k in self.cache.keys()]))
 
     def get(self, *args, **kwargs):
         if len(args) > 0:
-            return self._find(args[0], property='id')
+            return self._find(args[0], property=kwargs['property'])
         return self.cache
 
     def insert(self, *args, **kwargs):
+        # todo : EVOLUTION -> primaryKey au choix.
         self.cache[kwargs['object']['id']] = kwargs['object']
 
     def update(self, *args, **kwargs):
