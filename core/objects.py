@@ -8,12 +8,19 @@ class Column:
         self.table = Table(name)
         self.cache = {}
 
+        self._upload()
+
+    def _upload(self):
+        data = self.table.all()
+        if len(data) > 0:
+            self.refresh()
+
     def _find(self, *args, **kwargs):
-        return list(map(lambda x: x[kwargs['property']] == args[0], [self.cache[k] for k in self.cache.keys()]))
+        return list(filter(lambda x: x[kwargs['property']] == args[0], [self.cache[k] for k in self.cache.keys()]))
 
     def get(self, *args, **kwargs):
         if len(args) > 0:
-            return self._find(args, property='id')
+            return self._find(args[0], property='id')
         return self.cache
 
     def insert(self, *args, **kwargs):
@@ -31,7 +38,7 @@ class Column:
 
     """commit des informations du cache en dur"""
     def commit(self):
-        self.table.purge_table()
+        self.table.purge_table(self.name)
         for k in self.cache.keys():
             self.table.insert(self.cache[k])
         return True
@@ -39,4 +46,7 @@ class Column:
     """rechargement des données du cache depuis les données en durs"""
     def refresh(self):
         data = self.table.all()
-        self.cache = {o.id: o for o in data}
+        self.cache = {o['id']: o for o in data}
+
+    def close(self):
+        self.table.close()

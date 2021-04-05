@@ -8,7 +8,7 @@ class Ark(metaclass=SingletonMeta):
         self._attributes = []
 
     def _upload(self):
-        # looking for column's file and create attribute for each one.
+        # looking for columns's file and create attribute for each one.
         pass
 
     def add(self, name):
@@ -17,23 +17,23 @@ class Ark(metaclass=SingletonMeta):
         self._attributes.append(name)
 
     def put(self, name, other):
-        # alter table name.
+        # alter column name.
         pass
 
     def remove(self, name):
-        # drop table.
+        # drop column.
         delattr(self, name)
-        # remove file after attribute remove.
+        # remove file after removing attributes.
         self._attributes.remove(name)
 
     def commit(self):
-        # save cache tables.
+        # save cache columns.
         for a in self._attributes:
             self[a].commit()
         return True
 
     def refresh(self):
-        # restore cache from tables.
+        # restore cache from columns.
         for a in self._attributes:
             self[a].refresh()
         return True
