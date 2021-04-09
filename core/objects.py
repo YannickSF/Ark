@@ -42,7 +42,7 @@ class Column:
         if len(args) == 2:
             return self._find(args[0], args[1])
         elif len(args) == 0 and kwargs.keys().__contains__('query'):
-            return self._find(query=kwargs['query'])
+            return self._find(**kwargs)
         return self.cache
 
     """
@@ -72,16 +72,39 @@ class Column:
             idx = self.cache.index(self._find(args[0], args[1])[0])
             self.cache.remove(self.cache[idx])
 
-    """commiting cache to files"""
+    """commiting cache to files."""
     def commit(self):
         self.table.purge_table(self.name)
         for i in self.cache:
             self.table.insert(i)
         return True
 
-    """reload cache from files"""
+    """reload cache from files."""
     def refresh(self):
         self.cache = self.table.all()
 
+    """close access to file."""
     def close(self):
         self.table.close()
+
+
+class SynergyReponse:
+    def __init__(self, **kwargs):
+        pass
+
+    def __repr__(self):
+        return {}
+
+    def __str__(self):
+        return self.__repr__().__str__()
+
+
+class SyObject:
+    def __init__(self, **kwargs):
+        pass
+
+    def __repr__(self):
+        return {}
+
+    def __str__(self):
+        return self.__repr__().__str__()
