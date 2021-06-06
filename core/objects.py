@@ -16,8 +16,8 @@ class Column:
             self.refresh()
 
     """ 
-    @arg.0 -> property to watching on
-    @arg.1 -> value to search
+        @arg.0 -> property to watching on
+        @arg.1 -> value to search
     """
     def _find(self, *args, **kwargs):
         def shake(rec_list, qproperty, qvalue):
@@ -37,7 +37,7 @@ class Column:
         @args .0 -> propety to filter
         @args .1 -> value to filter
         @kwargs .query -> query dict of values
-        """
+    """
     def get(self, *args, **kwargs):
         if len(args) == 2:
             return self._find(args[0], args[1])
@@ -45,16 +45,14 @@ class Column:
             return self._find(**kwargs)
         return self.cache
 
-    """
-    @kwargs .object -> object to insert
-    """
+    """@kwargs .object -> object to insert"""
     def insert(self, *args, **kwargs):
         self.cache.append(kwargs['object'])
 
     """
-    @args .0 -> propety to filter
-    @args .1 -> value to filter
-    @kwargs .uobject -> object for update
+        @args .0 -> propety to filter
+        @args .1 -> value to filter
+        @kwargs .uobject -> object for update
     """
     def update(self, *args, **kwargs):
         if len(args) == 2 and kwargs.keys().__contains__('object'):
@@ -86,25 +84,3 @@ class Column:
     """close access to file."""
     def close(self):
         self.table.close()
-
-
-class SynergyReponse:
-    def __init__(self, **kwargs):
-        pass
-
-    def __repr__(self):
-        return {}
-
-    def __str__(self):
-        return self.__repr__().__str__()
-
-
-class SyObject:
-    def __init__(self, **kwargs):
-        pass
-
-    def __repr__(self):
-        return {}
-
-    def __str__(self):
-        return self.__repr__().__str__()

@@ -8,41 +8,65 @@ class Ark(metaclass=SingletonMeta):
         # at init Ark looking for columns files in 'datas' directory
         # if files are found Ark create column attributs and upload data to cache
         self._attributes = []
+        self._columns = {}
         self._upload()
 
     def _upload(self):
         # looking for columns's file and create attribute for each one.
         files = datas_files()
         for i in files:
-            self.add(i.split('.')[0])
+            self.__add__(i.split('.')[0])
 
     """create column attribut"""
-    def add(self, name):
-        setattr(self, name, Column(name))
-        self._attributes.append(name)
+    def __add__(self, other):
+        nwc = Column(other)
+        setattr(self, other, nwc)
+        self._attributes.append(other)
+        self._columns[other] = nwc
 
-    def put(self, *args, **kwargs):
-        # todo : alter column
-        pass
+    def alter(self, *args, **kwargs):
+        if args[0] == 'rename':
+            self.__add__(args[2])
+            for it in self._columns[args[1]].all:
+                self._columns[args[2]].insert(it)
 
     """remove column attribut"""
-    def remove(self, name):
-        delattr(self, name)
-        delete_file(name)
-        self._attributes.remove(name)
+    def __delete__(self, instance):
+        delattr(self, instance)
+        delete_file(instance)
+        self._attributes.remove(instance)
+        del self._columns[instance]
 
-    """make query on all column"""
-    @property
-    def query(self, **kwargs):
+    def index(self):
 
-        class Synergy:
-            def __init__(self, ark, args):
-                self.ark = ark
-                self.args = args
+        class ArkIndex:
+            """ Parameters [0] must be Ark db instance """
+            def __init__(self, *args, **kwargs):
+                self.mapping = {}
+                # persister le mapping  
 
-            def get(self):
-                # get data -> column.selected(propeties)
-                # return iterated(object.of(Dict))
+            def __add__(self, other):
                 pass
 
-        return Synergy(self, **kwargs)
+            def __delete__(self, instance):
+                pass
+
+        return ArkIndex(self)
+
+    """provide query on all columns at one time """
+    def search(self, parameters, query):
+
+        class ArkQuery:
+            def __init__(self, *args, **kwargs):
+                self.parameters = args
+                self.query = kwargs
+
+                self._execute()
+
+            def _execute(self):
+                pass
+
+            def fetch(self):
+                return
+
+        return ArkQuery(self, parameters, kwargs=query)
