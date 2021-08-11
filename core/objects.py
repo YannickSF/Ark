@@ -2,16 +2,16 @@
 from core.nosql import Table
 
 
-class Column:
+class Column(Table):
     def __init__(self, name):
+        Table.__init__(self, name)
         self.name = name
-        self.table = Table(name)
         self.cache = []
 
         self._upload()
 
     def _upload(self):
-        data = self.table.all()
+        data = self.all()
         if len(data) > 0:
             self.refresh()
 
@@ -38,7 +38,7 @@ class Column:
         @args .1 -> value to filter
         @kwargs .query -> query dict of values
     """
-    def get(self, *args, **kwargs):
+    def cache_get(self, *args, **kwargs):
         if len(args) == 2:
             return self._find(args[0], args[1])
         elif len(args) == 0 and kwargs.keys().__contains__('query'):
@@ -46,7 +46,7 @@ class Column:
         return self.cache
 
     """@kwargs .object -> object to insert"""
-    def insert(self, *args, **kwargs):
+    def cache_insert(self, *args, **kwargs):
         self.cache.append(kwargs['object'])
 
     """
@@ -54,7 +54,7 @@ class Column:
         @args .1 -> value to filter
         @kwargs .uobject -> object for update
     """
-    def update(self, *args, **kwargs):
+    def cache_update(self, *args, **kwargs):
         if len(args) == 2 and kwargs.keys().__contains__('object'):
             idx = self.cache.index(self._find(args[0], args[1])[0])
             self.cache[idx] = kwargs['object']
@@ -65,22 +65,18 @@ class Column:
         @args .0 -> propety to filter
         @args .1 -> value to filter
     """
-    def delete(self, *args, **kwargs):
+    def cache_delete(self, *args, **kwargs):
         if len(args) == 2:
             idx = self.cache.index(self._find(args[0], args[1])[0])
             self.cache.remove(self.cache[idx])
 
     """commiting cache to files."""
     def commit(self):
-        self.table.purge_table(self.name)
+        self.purge_tables()
         for i in self.cache:
-            self.table.insert(i)
+            self.insert(i)
         return True
 
     """reload cache from files."""
     def refresh(self):
-        self.cache = self.table.all()
-
-    """close access to file."""
-    def close(self):
-        self.table.close()
+        self.cache = self.all()

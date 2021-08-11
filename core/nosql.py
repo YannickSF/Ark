@@ -6,7 +6,9 @@ from settings import SETTINGS
 
 
 class Table(TinyDB):
-    """ This class simplify using of TinyBD"""
+    """ This class simplify using of TinyBD
+    /!\ : remember that using 'insert()' return databse_index
+    """
 
     def __init__(self, table_name, *args, **kwargs):
         """Initialize TinyBD with special parametrer
@@ -38,7 +40,7 @@ class Table(TinyDB):
     @staticmethod
     def get_fields(datas, fields_name: list):
         """ Returns the list of the elements of a field
-            @datas : data List
+            @database : data List
             @fields_name : list<str> : names of the columns to get"""
 
         if len(fields_name) < 2:

@@ -1,7 +1,16 @@
 
 import os
+import json
 from threading import Lock
 from settings import SETTINGS
+
+
+def delete_file(name):
+    os.remove(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH, '{0}.json'.format(name)))
+
+
+def datas_files():
+    return os.listdir(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH))
 
 
 class SingletonMeta(type):
@@ -39,9 +48,22 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
-def delete_file(name):
-    os.remove(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH, '{0}.json'.format(name)))
+class SoftStorage:
+    def __init__(self, jfile):
+        self.jfile = jfile
+        self.data = {}
 
+    def open(self):
+        with open(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.INDEX_MAPPING_PATH,
+                               '{0}.json'.format(self.jfile))) as json_file:
+            self.data = json.load(json_file)
 
-def datas_files():
-    return os.listdir(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.DATABASE_PATH))
+    def save(self, initialisation=None):
+        with open(os.path.join(SETTINGS.PROJECT_PATH, SETTINGS.INDEX_MAPPING_PATH,
+                               '{0}.json'.format(self.jfile)), 'w') as outfile:
+            if initialisation is not None:
+                json.dump(self.data, outfile)
+            else:
+                json.dump({}, outfile)
+
+        outfile.close()

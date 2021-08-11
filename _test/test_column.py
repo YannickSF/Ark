@@ -17,22 +17,22 @@ class TestColumn(unittest.TestCase):
 
     def test_insert(self):
         c.cache.clear()
-        c.insert('id', object={'id': 'id1', 'key1': 'value1'})
-        c.insert('id', object={'id': 'id2', 'key1': 'value2'})
+        c.cache_insert('id', object={'id': 'id1', 'key1': 'value1'})
+        c.cache_insert('id', object={'id': 'id2', 'key1': 'value2'})
 
-        self.assertEqual(c.get('id', 'id1')[0], {'id': 'id1', 'key1': 'value1'})
+        self.assertEqual(c.cache_get('id', 'id1')[0], {'id': 'id1', 'key1': 'value1'})
 
     def test_get(self):
         c.cache.clear()
-        c.insert('id', object={'id': 'id1', 'key1': 'value1'})
-        c.insert('id', object={'id': 'id2', 'key1': 'value2'})
-        c.insert('id', object={'id': 'id3', 'key1': 'value3'})
-        c.insert('id', object={'id': 'id3', 'key1': 'value4'})
+        c.cache_insert('id', object={'id': 'id1', 'key1': 'value1'})
+        c.cache_insert('id', object={'id': 'id2', 'key1': 'value2'})
+        c.cache_insert('id', object={'id': 'id3', 'key1': 'value3'})
+        c.cache_insert('id', object={'id': 'id3', 'key1': 'value4'})
 
-        values = c.get()
-        obj1 = c.get('id', 'id1')
-        obj2 = c.get('key1', 'value2')
-        obj3 = c.get(query={'id': 'id3', 'key1': 'value3'})
+        values = c.cache_get()
+        obj1 = c.cache_get('id', 'id1')
+        obj2 = c.cache_get('key1', 'value2')
+        obj3 = c.cache_get(query={'id': 'id3', 'key1': 'value3'})
 
         self.assertTrue(len(values) == 4)
         self.assertEqual({'id': 'id1', 'key1': 'value1'}, obj1[0])
@@ -44,36 +44,37 @@ class TestColumn(unittest.TestCase):
 
     def test_update(self):
         c.cache.clear()
-        c.insert('id', object={'id': 'id1', 'key1': 'value1'})
+        c.cache_insert('id', object={'id': 'id1', 'key1': 'value1'})
 
-        c.update('id', 'id1', object={'id': 'id1', 'key1': 'NEW'})
+        c.cache_update('id', 'id1', object={'id': 'id1', 'key1': 'NEW'})
 
-        self.assertEqual({'id': 'id1', 'key1': 'NEW'}, c.get('id', 'id1')[0])
+        self.assertEqual({'id': 'id1', 'key1': 'NEW'}, c.cache_get('id', 'id1')[0])
 
     def test_delete(self):
         c.cache.clear()
-        c.insert('id', object={'id': 'id1', 'key1': 'value1'})
-        c.insert('id', object={'id': 'id2', 'key1': 'value2'})
+        c.cache_insert('id', object={'id': 'id1', 'key1': 'value1'})
+        c.cache_insert('id', object={'id': 'id2', 'key1': 'value2'})
 
-        c.delete('id', 'id1')
+        c.cache_delete('id', 'id1')
 
         self.assertTrue(len(c.cache) == 1)
         self.assertNotIn({'id': 'id1', 'key1': 'value1'}, c.cache)
 
     def test_commit(self):
         c.cache.clear()
-        c.insert('id', object={'id': 'id1', 'key1': 'value1'})
-        c.insert('id', object={'id': 'id2', 'key1': 'value2'})
+        c.cache_insert('id', object={'id': 'id1', 'key1': 'value1'})
+        c.cache_insert('id', object={'id': 'id2', 'key1': 'value2'})
 
         c.commit()
         self.assertTrue(True)
 
     def test_refresh(self):
+        c.purge_tables()
         c.cache.clear()
-        c.insert('id', object={'id': 'id1', 'key1': 'value1'})
-        c.insert('id', object={'id': 'id2', 'key1': 'value2'})
+        c.cache_insert('id', object={'id': 'id1', 'key1': 'value1'})
+        c.cache_insert('id', object={'id': 'id2', 'key1': 'value2'})
         c.commit()
-        c.update('id1', object={'id': 'id1', 'key1': 'NEW'})
+        c.cache_update('id', 'id1', object={'id': 'id1', 'key1': 'NEW'})
 
         c.refresh()
 
