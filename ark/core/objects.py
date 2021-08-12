@@ -1,5 +1,5 @@
 
-from core.nosql import Table
+from ark.core.nosql import Table
 
 
 class Column(Table):

@@ -1,6 +1,6 @@
 
-from core.objects import Column
-from core.libs import SingletonMeta, delete_file, datas_files
+from ark.core.objects import Column
+from ark.core.libs import SingletonMeta, delete_file, datas_files
 
 
 class Ark(metaclass=SingletonMeta):

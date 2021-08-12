@@ -1,6 +1,6 @@
 
 import unittest
-from core.objects import Column
+from ark.core.objects import Column
 
 c = Column('test')
 

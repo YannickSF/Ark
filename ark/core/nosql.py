@@ -1,8 +1,8 @@
 # version : 1.0.0
 
 import os
-from tinydb import TinyDB, Query
-from settings import SETTINGS
+from tinydb import TinyDB
+from ark.settings import SETTINGS
 
 
 class Table(TinyDB):

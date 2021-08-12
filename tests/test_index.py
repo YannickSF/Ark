@@ -1,7 +1,7 @@
 
 import unittest
-from main import ArkIndex
-from core.nosql import Query
+from ark.main import ArkIndex
+from tinydb import Query
 
 
 i = ArkIndex()
