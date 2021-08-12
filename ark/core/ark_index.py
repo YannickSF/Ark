@@ -1,7 +1,7 @@
 
-from settings import SETTINGS
-from core.libs import SingletonMeta
-from core.objects import Table
+from ark.settings import SETTINGS
+from ark.core.libs import SingletonMeta
+from ark.core.objects import Table
 from tinydb import Query
 
 

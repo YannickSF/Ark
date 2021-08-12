@@ -2,7 +2,7 @@
 import os
 import json
 from threading import Lock
-from settings import SETTINGS
+from ark.settings import SETTINGS
 
 
 def delete_file(name):

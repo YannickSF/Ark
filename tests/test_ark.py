@@ -1,7 +1,7 @@
 
 import unittest
-from main import Ark
-from core.libs import datas_files
+from ark.main import Ark
+from ark.core.libs import datas_files
 
 a = Ark()
 
